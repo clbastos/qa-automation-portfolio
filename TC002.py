@@ -1,3 +1,6 @@
+import pytest
+import io
+import sys
 from playwright.sync_api import sync_playwright
 
 with sync_playwright() as p:
@@ -27,6 +30,12 @@ with sync_playwright() as p:
     #Clicar no botão de login
     page.locator("[data-test=\"login-button\"]").click()
     page.wait_for_timeout(2000) 
+
+    if page.url == "https://www.saucedemo.com/inventory.html":
+        print("✅ LOGIN REALIZADO COM SUCESSO!")
+    elif "error" in page.content().lower():
+        print("❌ ERRO: Credenciais inválidas!")
+
 
     input("Pressione Enter para fechar o navegador...")
     browser.close()

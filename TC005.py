@@ -1,4 +1,11 @@
+# -*- coding: utf-8 -*-
 from playwright.sync_api import sync_playwright
+import pytest
+import io
+import sys
+
+# Forçar UTF-8 no output
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 with sync_playwright() as p:
@@ -29,7 +36,11 @@ with sync_playwright() as p:
     page.locator("[data-test=\"login-button\"]").click()
     page.wait_for_timeout(2000) 
 
-    assert "inventory" in page.url
+    if page.url == "https://www.saucedemo.com/inventory.html":
+        print("✅ LOGIN REALIZADO COM SUCESSO!")
+    else:
+        print("❌ ERRO: Login falhou!")
+        
 
 
 

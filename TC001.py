@@ -1,4 +1,10 @@
 from playwright.sync_api import sync_playwright
+import pytest
+import io
+import sys
+
+# Forçar UTF-8 no output
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
@@ -28,5 +34,11 @@ with sync_playwright() as p:
     page.locator("[data-test=\"login-button\"]").click()
     page.wait_for_timeout(2000) 
 
+    if page.url == "https://www.saucedemo.com/inventory.html":
+        print("✅ LOGIN REALIZADO COM SUCESSO!")
+    else:
+        print("❌ ERRO: Login falhou!")
+        print(f"URL atual: {page.url}") 
+    
     input("Pressione Enter para fechar o navegador...")
     browser.close()

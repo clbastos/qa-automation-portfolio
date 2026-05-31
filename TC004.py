@@ -1,4 +1,10 @@
+import pytest
+import io
+import sys
 from playwright.sync_api import sync_playwright
+
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
@@ -31,7 +37,18 @@ with sync_playwright() as p:
     #clicar no botão de adicionar ao carrinho o item
     page.locator("[data-test=\"add-to-cart-sauce-labs-backpack\"]").click()
 
+    #clicar no carrinho
+    page.wait_for_timeout(2000)
+    page.locator("[data-test=\"shopping-cart-link\"]").click()
+    page.wait_for_timeout(2000)
 
+
+    
+    # Verificar se o item foi adicionado ao carrinho
+    if page.locator("text=Sauce Labs Backpack").is_visible():
+        print("✅ ITEM ADICIONADO AO CARRINHO COM SUCESSO!")
+    else:
+        print("❌ ERRO: Item não encontrado no carrinho!")
 
 
 
